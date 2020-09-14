@@ -61,7 +61,6 @@ if args.port:
         print ("Error: status must be either: on, off")
         exit()
 
-
 config = { 
            'switch_addr'   : args.switch_addr,
            'passwd'        : args.passwd,
@@ -79,7 +78,6 @@ config = {
 #
 # Get the switches 'rand' value:
 #
-
 _contents = urllib.request.urlopen("http://%s/" % config['switch_addr']).read().decode("utf-8").replace('\n','')
 
 time.sleep(config['sleep_between_calls'])
@@ -120,7 +118,6 @@ config['passwd_md5'] = hashlib.md5(config['passwd_merged'].encode()).hexdigest()
 #
 # Attempt to post to login page, so we'll get a session cookie:
 #
-
 data = { 
          'password' : config['passwd_md5'],
        }
@@ -132,7 +129,6 @@ req = urllib.request.Request("http://%s/login.cgi" % config['switch_addr'], data
 resp = urllib.request.urlopen(req)
 
 time.sleep(config['sleep_between_calls'])
-
 
 _success_check = resp
 
@@ -146,11 +142,7 @@ if 'The maximum number of attempts has been reached' in _success_check:
     print ("ERROR: The maximum number of failed attempts has been reached. Wait a few minutes and then try again")
     exit()
 
-
-
-
 # Example cookie:
-#
 # GS108SID=K^tecASxwBawbwuJftgrB`n_yGjmr`JYhnFxJ\WmTILVUasWbFduJU\igbX`[GLhUw]_b`LLqZit_\_G; path=/;HttpOnly
 
 _tmp = re.findall("^GS108SID=(.*); path=/;HttpOnly$", str(resp.info()['Set-Cookie']))
@@ -172,7 +164,6 @@ if not config['auth_cookie']:
 # Read 'hash' input field from: status.htm
 # Example: <input type="hidden" name='hash' id='hash' value='26346'>
 #
-
 req = urllib.request.Request("http://%s/status.htm" % config['switch_addr'])
 req.add_header("Cookie", "GS108SID=%s" % config['auth_cookie'])
 
@@ -207,14 +198,10 @@ if config['read_status'] is True:
         print ("Port %d   %s" % (p, _p_status))
         
         _tmp_line += 14
-        
-
-
 
 #
 # If specified, post the desired status to the desired port:
 #
-
 if config['port']:
     _port = 'port' + config['port']
     
