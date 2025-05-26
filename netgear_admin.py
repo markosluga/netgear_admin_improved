@@ -208,16 +208,47 @@ _status_check_list = _success_check.splitlines()
 _success_check = _success_check.replace('\n','')
     
 print("DEBUG: Looking for hash in page content...")
-# Try different regex patterns to find the hash
+
+# Search for any hash-like pattern and print it for debugging
+hash_debug = re.findall("hash['\"]\\s*[:=]\\s*['\"]([^'\"]+)['\"]", _success_check)
+if hash_debug:
+    print("DEBUG: Found potential hash values:", hash_debug)
+
+# Search for any input with name="hash" and print it
+hash_inputs = re.findall("<input[^>]*name=['\"]hash['\"][^>]*value=['\"]([^'\"]+)['\"]", _success_check)
+if hash_inputs:
+    print("DEBUG: Found hash inputs:", hash_inputs)
+    # Use the first hash input found as our hash value
+    _tmp = hash_inputs
+    config['hash_val'] = hash_inputs[0]
+    print("DEBUG: Using hash value from input:", config['hash_val'])
+
+# Try different regex patterns to find the hash (numeric format)
 _tmp = re.findall("<input type=\"hidden\" name='hash' id='hash' value='(\d+)'>", _success_check)
 
 if not _tmp:
-    # Try alternative pattern
+    # Try alternative pattern (numeric format)
     _tmp = re.findall("name=['\"]hash['\"] id=['\"]hash['\"] value=['\"](\d+)['\"]", _success_check)
 
 if not _tmp:
-    # Try another alternative pattern
+    # Try another alternative pattern (numeric format)
     _tmp = re.findall("value=['\"](\d+)['\"].*name=['\"]hash['\"]", _success_check)
+
+if not _tmp:
+    # Try to find hexadecimal hash format (32 character hex string)
+    _tmp = re.findall("name=['\"]hash['\"] value=['\"]([0-9a-f]{32})['\"]", _success_check)
+
+if not _tmp:
+    # Try alternative hexadecimal pattern
+    _tmp = re.findall("value=['\"]([0-9a-f]{32})['\"].*name=['\"]hash['\"]", _success_check)
+
+if not _tmp:
+    # Try to find hash in JavaScript code
+    _tmp = re.findall("hash\\s*[:=]\\s*['\"]([0-9a-f]{32})['\"]", _success_check)
+
+if not _tmp:
+    # Try to find any hash parameter
+    _tmp = re.findall("hash['\"]\\s*[:=]\\s*['\"]([^'\"]+)['\"]", _success_check)
 
 if not _tmp:
     # Print a portion of the page to help debug
