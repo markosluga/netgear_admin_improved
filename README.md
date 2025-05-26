@@ -1,6 +1,6 @@
 # Netgear Switch Admin Tool
 
-A Python utility for managing Netgear smart switches via their web interface.
+A Python utility for managing Netgear Plus managed switches via command line. It connects via their web interface and makes changes and allows you to switch ports on/off, read port status and reboot the switch strait out of your command line or automation service.
 
 ## Supported Devices
 
