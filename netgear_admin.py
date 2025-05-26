@@ -250,14 +250,16 @@ if not _tmp:
     # Try to find any hash parameter
     _tmp = re.findall("hash['\"]\\s*[:=]\\s*['\"]([^'\"]+)['\"]", _success_check)
 
-if not _tmp:
+if not _tmp and not hash_inputs:
     # Print a portion of the page to help debug
     print("DEBUG: Page content snippet:", _success_check[:500])
     print("ERROR: Could not find hash value in page. Check the HTML structure.")
     exit()
 
-config['hash_val'] = _tmp[0]
-print("DEBUG: Found hash value:", config['hash_val'])
+# Only set from _tmp if we didn't already set from hash_inputs
+if not hash_inputs and _tmp:
+    config['hash_val'] = _tmp[0]
+    print("DEBUG: Found hash value from regex:", config['hash_val'])
 
 if config['read_status'] is True:
     print ("port status:")
