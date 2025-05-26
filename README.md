@@ -1,6 +1,8 @@
 # Netgear Switch Admin Tool
 
-A Python utility for managing Netgear Plus managed switches via command line. It connects via their web interface and makes changes and allows you to switch ports on/off, read port status and reboot the switch strait out of your command line or automation service.
+A Python utility for managing Netgear Plus managed switches via command line. 
+
+It connects via the switch built in web interface and allows you to switch ports on/off, read port status and reboot the switch strait out of your command line or automation service. Other features will be added as I find more time.
 
 ## Supported Devices
 
@@ -53,3 +55,4 @@ python netgear_admin.py -a 192.168.0.163 -passwd <password> -reboot
 
 - Only one port can be toggled per run
 - The switch may return 'The maximum number of attempts has been reached' errors. In this case wait a few mintues before retrying
+- Reboot might not work on your switch if the cookie changes or the hash returns 0 - please submit a bug as per "Supporting additional models" above
